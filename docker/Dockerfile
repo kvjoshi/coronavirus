@@ -1,5 +1,5 @@
 # Installing R version 3.6.1 from rocker
-FROM rocker/r-ver:3.6.1
+FROM rocker/rstudio
 
 LABEL maintainer="Rami Krispin <rami.krispin@gmail.com>"
 
@@ -35,11 +35,5 @@ RUN install2.r -r https://cran.microsoft.com/snapshot/2020-03-01 \
         sf
 
 
-# Example shiny application
-RUN mkdir /root/shiny
-COPY app.R /root/shiny
+RUN R -e 'devtools::install_github("RamiKrispin/coronavirus")'
 
-# Setting the Rprofile.site file
-RUN echo "options(repos = c(CRAN='https://mran.microsoft.com/snapshot/2019-10-01'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site
-
-RUN echo "local({ options(shiny.port = 3838, shiny.host = '0.0.0.0')})" >> /usr/local/lib/R/etc/Rprofile.site
